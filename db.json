@@ -1,0 +1,39 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Alex Stack",
+      "email": "alex@northstar.com",
+      "role": "admin",
+      "tenantId": 1,
+      "passwordHash": "$2b$10$o9/e3RS2uSWzvsUiBzUvnudAK7Q61uwtx06QvcLStFAptks6Pslhq",
+      "securityQuestion": "What was your first car?",
+      "securityAnswerHash": "$2b$10$aB5swg1MdaQ1wfrjun8.5uZz8ury1zv5Va7Gze75DFjH8tN09kjMy",
+      "isActive": true,
+      "lastLogin": null,
+      "createdAt": "2026-03-02T12:00:00Z"
+    }
+  ],
+  "tenants": [
+    {
+      "id": 1,
+      "name": "Planet Fitness"
+    }
+  ],
+  "jobs": [
+    {
+      "id": 1,
+      "title": "Frontend Developer",
+      "tenantId": 1,
+      "status": "open"
+    }
+  ],
+  "candidates": [
+    {
+      "id": 1,
+      "name": "Jane Doe",
+      "jobId": 1,
+      "status": "interview"
+    }
+  ]
+}

@@ -11,7 +11,8 @@
       "securityAnswerHash": "$2b$10$aB5swg1MdaQ1wfrjun8.5uZz8ury1zv5Va7Gze75DFjH8tN09kjMy",
       "isActive": true,
       "lastLogin": null,
-      "createdAt": "2026-03-02T12:00:00Z"
+      "createdAt": "2026-03-02T12:00:00Z",
+      "updatedAt": "2026-03-02T12:00:00Z"
     }
   ],
   "tenants": [

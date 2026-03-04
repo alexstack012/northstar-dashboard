@@ -1,0 +1,5 @@
+<a *ngFor="let item of navItems"
+   [routerLink]="item.path"
+   routerLinkActive="active">
+  {{ item.label }}
+</a>

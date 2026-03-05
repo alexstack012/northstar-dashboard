@@ -2,16 +2,21 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  background: #f5f7fa;
 }
 
-.layout-body {
-  flex: 1;
+.topbar {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: #f7eef5;
+  border-bottom: 1px solid #e3d7df;
 }
 
 .content {
   flex: 1;
   padding: 1.5rem;
   overflow-y: auto;
-  background: #f5f7fa;
 }

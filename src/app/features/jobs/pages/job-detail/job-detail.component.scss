@@ -1,0 +1,24 @@
+.job-detail-page {
+  padding: 1rem;
+}
+
+.job-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-top: 1rem;
+  padding: 1rem;
+}
+
+.error-box {
+  border: 1px solid #e23b3b;
+  border-radius: 8px;
+  color: #b62d2d;
+  margin-top: 1rem;
+  padding: 0.75rem;
+}
+
+.btn-group {
+  padding: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}

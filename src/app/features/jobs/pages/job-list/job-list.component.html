@@ -1,2 +1,27 @@
-<h1>Jobs</h1>
-<p>Job list page placeholder.</p>
+<section class="jobs-page">
+  <div class="jobs-header">
+    <h1>Jobs</h1>
+    <button type="button" (click)="loadJobs()" [disabled]="loading()">Refresh</button>
+  </div>
+
+  <p *ngIf="loading()">Loading jobs...</p>
+
+  <div *ngIf="!loading() && errorMessage()" class="error-box">
+    <p>{{ errorMessage() }}</p>
+    <button type="button" (click)="loadJobs()">Try Again</button>
+  </div>
+
+  <p *ngIf="!loading() && !errorMessage() && jobs().length === 0">No jobs found.</p>
+
+  <ul *ngIf="!loading() && !errorMessage() && jobs().length > 0" class="job-list">
+    <li *ngFor="let job of jobs()" class="job-row">
+      <div>
+        <h3>
+          <a [routerLink]="['/jobs', job.id]">{{ job.title }}</a>
+        </h3>
+        <p>Tenant ID: {{ job.tenantId }}</p>
+      </div>
+      <span class="status">{{ job.status | titlecase }}</span>
+    </li>
+  </ul>
+</section>

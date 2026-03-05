@@ -1,0 +1,28 @@
+<section class="job-detail-page">
+  <div class="btn-group">
+    <a routerLink="/jobs" matButton="elevated"><mat-icon>arrow_back</mat-icon>Back to jobs</a>
+    <button type="button" matButton="elevated" (click)="loadJob()" [disabled]="loading()">
+      <mat-icon>refresh</mat-icon>Refresh
+    </button>
+    <button type="button" matButton="elevated" (click)="editJob()" [disabled]="loading()">
+      <mat-icon>edit</mat-icon>Edit
+    </button>
+    <button type="button" matButton="elevated" (click)="deleteJob()" [disabled]="loading()">
+      <mat-icon>delete</mat-icon>Delete
+    </button>
+  </div>
+
+  <p *ngIf="loading()">Loading job...</p>
+
+  <div *ngIf="!loading() && errorMessage()" class="error-box">
+    <p>{{ errorMessage() }}</p>
+    <button type="button" (click)="loadJob()">Try Again</button>
+  </div>
+
+  <article *ngIf="!loading() && !errorMessage() && job()" class="job-card">
+    <h1>{{ job()!.title }}</h1>
+    <p><strong>ID:</strong> {{ job()!.id }}</p>
+    <p><strong>Tenant ID:</strong> {{ job()!.tenantId }}</p>
+    <p><strong>Status:</strong> {{ job()!.status | titlecase }}</p>
+  </article>
+</section>

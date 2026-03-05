@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ROUTE_PATHS } from '../../core/constants/route-paths.constants';
+import { MatAnchor } from "@angular/material/button";
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [NgFor, RouterLink, RouterLinkActive],
+  imports: [NgFor, RouterLink, RouterLinkActive, MatAnchor],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })

@@ -27,6 +27,12 @@ export const SHELL_ROUTES: Routes = [
             .then((m) => m.JobListComponent)
       },
       {
+        path: `${ROUTE_PATHS.JOBS}/${ROUTE_PATHS.DETAIL}`,
+        loadComponent: () =>
+          import('../../features/jobs/pages/job-detail/job-detail.component')
+            .then((m) => m.JobDetailComponent)
+      },
+      {
         path: ROUTE_PATHS.CANDIDATES,
         loadComponent: () =>
           import('../../features/candidates/pages/candidate-list/candidate-list.component')

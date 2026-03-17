@@ -1,2 +1,46 @@
-<h1>Candidates</h1>
-<p>Candidate list page placeholder.</p>
+<section class="candidates-page">
+  <div class="candidates-header">
+    <div>
+      <p class="eyebrow">Northstar Talent</p>
+      <h1>Candidates</h1>
+      <p class="supporting-copy">Track people in the hiring pipeline and keep each candidate tied to the right role.</p>
+    </div>
+
+    <div class="candidate-actions">
+      <a mat-stroked-button routerLink="/candidates/new">Add Candidate</a>
+      <button matButton="filled" type="button" (click)="loadCandidates()" [disabled]="loading()">
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  <p *ngIf="loading()" class="status-message">Loading candidates...</p>
+
+  <div *ngIf="!loading() && errorMessage()" class="error-box">
+    <p>{{ errorMessage() }}</p>
+    <button mat-stroked-button type="button" (click)="loadCandidates()">Try Again</button>
+  </div>
+
+  <div *ngIf="!loading() && !errorMessage() && candidates().length === 0" class="empty-state">
+    <h2>No candidates yet</h2>
+    <p>Add the first candidate to start tracking interviews, offers, and placements.</p>
+    <a matButton="filled" routerLink="/candidates/new">Add Your First Candidate</a>
+  </div>
+
+  <ul *ngIf="!loading() && !errorMessage() && candidates().length > 0" class="candidate-list">
+    <li *ngFor="let candidate of candidates()" class="candidate-row">
+      <div class="candidate-summary">
+        <h3 class="candidate-name">
+          <a [routerLink]="['/candidates', candidate.id]">{{ candidate.name }}</a>
+        </h3>
+        <p>{{ candidate.email }}</p>
+        <p>{{ candidate.jobTitle }}</p>
+      </div>
+
+      <div class="candidate-meta">
+        <span class="status">{{ candidate.status | titlecase }}</span>
+        <a mat-stroked-button [routerLink]="['/candidates', candidate.id, 'edit']">Edit</a>
+      </div>
+    </li>
+  </ul>
+</section>

@@ -1,0 +1,94 @@
+<section class="candidate-form-page">
+  <div class="candidate-form-header">
+    <div>
+      <p class="eyebrow">Candidates</p>
+      <h1>{{ pageTitle() }}</h1>
+      <p class="supporting-copy">{{ pageDescription() }}</p>
+    </div>
+
+    <a mat-stroked-button [routerLink]="isEditMode ? ['/', 'candidates', candidateId] : ['/', 'candidates']">
+      Cancel
+    </a>
+  </div>
+
+  <div *ngIf="errorMessage()" class="error-box">
+    {{ errorMessage() }}
+  </div>
+
+  <mat-card class="candidate-form-card">
+    <p *ngIf="loading()" class="status-message">Loading candidate details...</p>
+
+    <form *ngIf="!loading()" [formGroup]="form" (ngSubmit)="submit()" class="candidate-form">
+      <div class="two-column-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Full Name</mat-label>
+          <input matInput formControlName="name" maxlength="80" />
+          <mat-error *ngIf="form.controls.name.hasError('required')">
+            A candidate name is required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email" />
+          <mat-error *ngIf="form.controls.email.hasError('required')">
+            An email address is required.
+          </mat-error>
+          <mat-error *ngIf="form.controls.email.hasError('email')">
+            Enter a valid email address.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="two-column-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Phone</mat-label>
+          <input matInput formControlName="phone" maxlength="20" />
+          <mat-error *ngIf="form.controls.phone.hasError('required')">
+            A phone number is required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Assigned Job</mat-label>
+          <mat-select formControlName="jobId">
+            <mat-option *ngFor="let job of jobs()" [value]="job.id">
+              {{ job.title }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls.jobId.hasError('min') || form.controls.jobId.hasError('required')">
+            Select a job for this candidate.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Pipeline Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option *ngFor="let status of statusOptions" [value]="status.value">
+            {{ status.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Notes</mat-label>
+        <textarea matInput rows="5" formControlName="notes" maxlength="500"></textarea>
+        <mat-hint align="end">{{ form.controls.notes.value.length }}/500</mat-hint>
+        <mat-error *ngIf="form.controls.notes.hasError('required')">
+          Add a short summary so the next teammate has context.
+        </mat-error>
+      </mat-form-field>
+
+      <div class="form-actions">
+        <button matButton="filled" type="submit" [disabled]="saving() || jobs().length === 0">
+          {{ saving() ? 'Saving...' : (isEditMode ? 'Save Changes' : 'Add Candidate') }}
+        </button>
+
+        <a mat-stroked-button [routerLink]="['/', 'candidates']">
+          Back to Candidates
+        </a>
+      </div>
+    </form>
+  </mat-card>
+</section>

@@ -1,27 +1,45 @@
 <section class="jobs-page">
   <div class="jobs-header">
-    <h1>Jobs</h1>
-    <button type="button" (click)="loadJobs()" [disabled]="loading()">Refresh</button>
+    <div>
+      <p class="eyebrow">Northstar Hiring</p>
+      <h1>Jobs</h1>
+      <p class="supporting-copy">Track open roles, review hiring status, and keep each client tenant organized.</p>
+    </div>
+
+    <div class="jobs-actions">
+      <a mat-stroked-button routerLink="/jobs/new">Create Job</a>
+      <button matButton="filled" type="button" (click)="loadJobs()" [disabled]="loading()">
+        Refresh
+      </button>
+    </div>
   </div>
 
-  <p *ngIf="loading()">Loading jobs...</p>
+  <p *ngIf="loading()" class="status-message">Loading jobs...</p>
 
   <div *ngIf="!loading() && errorMessage()" class="error-box">
     <p>{{ errorMessage() }}</p>
-    <button type="button" (click)="loadJobs()">Try Again</button>
+    <button mat-stroked-button type="button" (click)="loadJobs()">Try Again</button>
   </div>
 
-  <p *ngIf="!loading() && !errorMessage() && jobs().length === 0">No jobs found.</p>
+  <div *ngIf="!loading() && !errorMessage() && jobs().length === 0" class="empty-state">
+    <h2>No jobs yet</h2>
+    <p>Create the first role to start building out the hiring workflow.</p>
+    <a matButton="filled" routerLink="/jobs/new">Create Your First Job</a>
+  </div>
 
   <ul *ngIf="!loading() && !errorMessage() && jobs().length > 0" class="job-list">
     <li *ngFor="let job of jobs()" class="job-row">
-      <div>
-        <h3>
+      <div class="job-summary">
+        <h3 class="job-title">
           <a [routerLink]="['/jobs', job.id]">{{ job.title }}</a>
         </h3>
         <p>Tenant ID: {{ job.tenantId }}</p>
       </div>
-      <span class="status">{{ job.status | titlecase }}</span>
+
+      <div class="job-meta">
+        <span class="status">{{ job.status | titlecase }}</span>
+        <a mat-stroked-button [routerLink]="['/jobs', job.id, 'edit']">Edit</a>
+      </div>
     </li>
   </ul>
 </section>

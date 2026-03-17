@@ -22,21 +22,13 @@ export const SHELL_ROUTES: Routes = [
       },
       {
         path: ROUTE_PATHS.JOBS,
-        loadComponent: () =>
-          import('../../features/jobs/pages/job-list/job-list.component')
-            .then((m) => m.JobListComponent)
-      },
-      {
-        path: `${ROUTE_PATHS.JOBS}/${ROUTE_PATHS.DETAIL}`,
-        loadComponent: () =>
-          import('../../features/jobs/pages/job-detail/job-detail.component')
-            .then((m) => m.JobDetailComponent)
+        loadChildren: () =>
+          import('../../features/jobs/jobs.routes').then((m) => m.JOB_ROUTES)
       },
       {
         path: ROUTE_PATHS.CANDIDATES,
-        loadComponent: () =>
-          import('../../features/candidates/pages/candidate-list/candidate-list.component')
-            .then((m) => m.CandidateListComponent)
+        loadChildren: () =>
+          import('../../features/candidates/candidates.routes').then((m) => m.CANDIDATE_ROUTES)
       },
       {
         path: ROUTE_PATHS.USERS,

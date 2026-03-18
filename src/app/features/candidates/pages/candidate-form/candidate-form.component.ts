@@ -106,7 +106,14 @@ export class CandidateFormComponent implements OnInit {
       )
       .subscribe({
         next: (candidate) => {
-          this.router.navigate(['/', ROUTE_PATHS.CANDIDATES, candidate.id]);
+          const destinationId = this.resolveNavigationId(candidate.id);
+
+          if (destinationId !== null) {
+            this.router.navigate(['/', ROUTE_PATHS.CANDIDATES, destinationId]);
+            return;
+          }
+
+          this.router.navigate(['/', ROUTE_PATHS.CANDIDATES]);
         },
         error: () => {
           this.errorMessage.set(
@@ -116,6 +123,15 @@ export class CandidateFormComponent implements OnInit {
           );
         }
       });
+  }
+
+  private resolveNavigationId(returnedId: unknown): number | null {
+    if (this.isEditMode) {
+      return this.candidateId;
+    }
+
+    const parsedId = Number(returnedId);
+    return Number.isInteger(parsedId) && parsedId > 0 ? parsedId : null;
   }
 
   private loadJobs(): void {

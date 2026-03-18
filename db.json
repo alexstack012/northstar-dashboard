@@ -1,7 +1,7 @@
 {
   "users": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Alex Stack",
       "email": "alex@northstar.com",
       "role": "admin",
@@ -17,13 +17,13 @@
   ],
   "tenants": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Planet Fitness"
     }
   ],
   "jobs": [
     {
-      "id": 1,
+      "id": "1",
       "title": "Frontend Developer",
       "tenantId": 1,
       "status": "open"
@@ -31,7 +31,7 @@
   ],
   "candidates": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Jane Doe",
       "email": "jane.doe@example.com",
       "phone": "555-0101",
@@ -40,7 +40,7 @@
       "notes": "Strong frontend portfolio. Interview feedback highlighted solid Angular fundamentals and strong communication."
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Marcus Rivera",
       "email": "marcus.rivera@example.com",
       "phone": "555-0134",
@@ -48,5 +48,6 @@
       "status": "screening",
       "notes": "Initial recruiter call scheduled. Previous agency experience and good client-facing background."
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

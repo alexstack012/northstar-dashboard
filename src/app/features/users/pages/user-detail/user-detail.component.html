@@ -1,0 +1,100 @@
+<section class="user-detail-page">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">User Record</p>
+      <h1 *ngIf="user()">{{ user()!.name }}</h1>
+      <h1 *ngIf="!user()">User Detail</h1>
+      <p class="supporting-copy">Review access, tenant assignment, and account status for this team member.</p>
+    </div>
+
+    <div class="btn-group">
+      <a routerLink="/users" mat-stroked-button>
+        <mat-icon>arrow_back</mat-icon>
+        Back to users
+      </a>
+      <button type="button" mat-stroked-button (click)="loadUser()" [disabled]="loading() || updatingStatus()">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+      </button>
+      <button type="button" matButton="filled" (click)="editUser()" [disabled]="loading() || updatingStatus() || !user()">
+        <mat-icon>edit</mat-icon>
+        Edit
+      </button>
+      <button
+        type="button"
+        matButton="filled"
+        class="status-button"
+        (click)="toggleActiveStatus()"
+        [disabled]="loading() || updatingStatus() || !user() || isCurrentUser">
+        <mat-icon>{{ user()?.isActive ? 'person_off' : 'person' }}</mat-icon>
+        {{
+          isCurrentUser
+            ? 'Current Admin'
+            : updatingStatus()
+              ? 'Saving...'
+              : user()?.isActive
+                ? 'Deactivate'
+                : 'Reactivate'
+        }}
+      </button>
+    </div>
+  </div>
+
+  <p *ngIf="loading()" class="status-message">Loading user...</p>
+
+  <div *ngIf="!loading() && errorMessage()" class="error-box">
+    <p>{{ errorMessage() }}</p>
+    <button mat-stroked-button type="button" (click)="loadUser()">Try Again</button>
+  </div>
+
+  <article *ngIf="!loading() && !errorMessage() && user()" class="user-card">
+    <div class="detail-row">
+      <span class="detail-label">Account Status</span>
+      <span class="status" [class.inactive]="!user()!.isActive">
+        {{ user()!.isActive ? 'Active' : 'Inactive' }}
+      </span>
+    </div>
+
+    <div class="detail-grid">
+      <div class="detail-item">
+        <span class="detail-label">Email</span>
+        <strong>{{ user()!.email }}</strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Role</span>
+        <strong>{{ user()!.role | titlecase }}</strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Tenant ID</span>
+        <strong>{{ user()!.tenantId }}</strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Security Question</span>
+        <strong>{{ user()!.securityQuestion }}</strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Last Login</span>
+        <strong>{{ user()!.lastLogin ? (user()!.lastLogin | date: 'medium') : 'Never' }}</strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Created</span>
+        <strong>{{ user()!.createdAt | date: 'medium' }}</strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Updated</span>
+        <strong>{{ user()!.updatedAt | date: 'medium' }}</strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">User ID</span>
+        <strong>{{ user()!.id }}</strong>
+      </div>
+    </div>
+  </article>
+</section>

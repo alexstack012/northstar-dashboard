@@ -1,0 +1,116 @@
+<section class="user-form-page">
+  <div class="user-form-header">
+    <div>
+      <p class="eyebrow">Users</p>
+      <h1>{{ pageTitle() }}</h1>
+      <p class="supporting-copy">{{ pageDescription() }}</p>
+    </div>
+
+    <a mat-stroked-button [routerLink]="isEditMode ? ['/', 'users', userId] : ['/', 'users']">
+      Cancel
+    </a>
+  </div>
+
+  <div *ngIf="errorMessage()" class="error-box">
+    {{ errorMessage() }}
+  </div>
+
+  <mat-card class="user-form-card">
+    <p *ngIf="loading()" class="status-message">Loading user details...</p>
+
+    <form *ngIf="!loading()" [formGroup]="form" (ngSubmit)="submit()" class="user-form">
+      <div class="two-column-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Full Name</mat-label>
+          <input matInput formControlName="name" maxlength="80" />
+          <mat-error *ngIf="form.controls.name.hasError('required')">
+            A name is required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" />
+          <mat-error *ngIf="form.controls.email.hasError('required')">
+            An email address is required.
+          </mat-error>
+          <mat-error *ngIf="form.controls.email.hasError('email')">
+            Enter a valid email address.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="two-column-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Role</mat-label>
+          <mat-select formControlName="role">
+            <mat-option *ngFor="let role of roleOptions" [value]="role.value">
+              {{ role.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tenant ID</mat-label>
+          <input matInput type="number" min="1" formControlName="tenantId" />
+          <mat-error *ngIf="form.controls.tenantId.hasError('required') || form.controls.tenantId.hasError('min')">
+            Tenant id must be greater than 0.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="two-column-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Security Question</mat-label>
+          <mat-select formControlName="securityQuestion">
+            <mat-option *ngFor="let question of securityQuestions" [value]="question">
+              {{ question }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ isEditMode ? 'New Security Answer' : 'Security Answer' }}</mat-label>
+          <input matInput type="password" formControlName="securityAnswer" />
+          <mat-error *ngIf="form.controls.securityAnswer.hasError('required')">
+            A security answer is required.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="two-column-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ isEditMode ? 'New Password' : 'Temporary Password' }}</mat-label>
+          <input matInput type="password" formControlName="password" />
+          <mat-hint>
+            {{ isEditMode ? 'Leave blank to keep the current password.' : 'Set an initial password for this account.' }}
+          </mat-hint>
+          <mat-error *ngIf="form.controls.password.hasError('required')">
+            A password is required.
+          </mat-error>
+          <mat-error *ngIf="form.controls.password.hasError('minlength')">
+            Password must be at least 6 characters.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="isActive">
+            <mat-option [value]="true">Active</mat-option>
+            <mat-option [value]="false">Inactive</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="form-actions">
+        <button matButton="filled" type="submit" [disabled]="saving()">
+          {{ saving() ? 'Saving...' : (isEditMode ? 'Save Changes' : 'Create User') }}
+        </button>
+
+        <a mat-stroked-button [routerLink]="['/', 'users']">
+          Back to Users
+        </a>
+      </div>
+    </form>
+  </mat-card>
+</section>

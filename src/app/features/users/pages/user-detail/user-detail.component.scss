@@ -1,0 +1,112 @@
+.user-detail-page {
+  display: grid;
+  gap: 1rem;
+}
+
+.page-header {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.eyebrow {
+  color: #735267;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.4rem;
+  text-transform: uppercase;
+}
+
+.page-header h1 {
+  margin: 0;
+}
+
+.supporting-copy {
+  color: #5f5860;
+  margin: 0.5rem 0 0;
+  max-width: 40rem;
+}
+
+.user-card {
+  background: #fff;
+  border: 1px solid #e2dbe0;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(67, 40, 59, 0.06);
+  padding: 1.4rem;
+}
+
+.error-box {
+  background: #fff4f4;
+  border: 1px solid #e5b7b7;
+  border-radius: 14px;
+  color: #a63e3e;
+  padding: 0.9rem 1rem;
+}
+
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.detail-row {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.detail-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.detail-item {
+  background: #faf7f9;
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.detail-label {
+  color: #6f6670;
+  display: block;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+}
+
+.status {
+  background: #edf6f1;
+  border: 1px solid #b5d4bf;
+  border-radius: 999px;
+  color: #2e6f48;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.35rem 0.8rem;
+}
+
+.status.inactive,
+.status-button {
+  background: #f6edf3;
+  border-color: #ccb7c2;
+  color: #6a485f;
+}
+
+.status-message {
+  margin: 0;
+}
+
+@media (max-width: 720px) {
+  .page-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}

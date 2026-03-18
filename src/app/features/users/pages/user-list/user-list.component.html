@@ -1,2 +1,49 @@
-<h1>Users</h1>
-<p>User list page placeholder.</p>
+<section class="users-page">
+  <div class="users-header">
+    <div>
+      <p class="eyebrow">Admin Console</p>
+      <h1>Users</h1>
+      <p class="supporting-copy">Manage recruiters and administrators, monitor account status, and keep tenant access organized.</p>
+    </div>
+
+    <div class="user-actions">
+      <a mat-stroked-button routerLink="/users/new">Add User</a>
+      <button matButton="filled" type="button" (click)="loadUsers()" [disabled]="loading()">
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  <p *ngIf="loading()" class="status-message">Loading users...</p>
+
+  <div *ngIf="!loading() && errorMessage()" class="error-box">
+    <p>{{ errorMessage() }}</p>
+    <button mat-stroked-button type="button" (click)="loadUsers()">Try Again</button>
+  </div>
+
+  <div *ngIf="!loading() && !errorMessage() && users().length === 0" class="empty-state">
+    <h2>No users yet</h2>
+    <p>Create the first recruiter or administrator account to open up the admin workflow.</p>
+    <a matButton="filled" routerLink="/users/new">Create User</a>
+  </div>
+
+  <ul *ngIf="!loading() && !errorMessage() && users().length > 0" class="user-list">
+    <li *ngFor="let user of users()" class="user-row">
+      <div class="user-summary">
+        <h3 class="user-name">
+          <a [routerLink]="['/users', user.id]">{{ user.name }}</a>
+        </h3>
+        <p>{{ user.email }}</p>
+        <p>Tenant {{ user.tenantId }} · {{ user.role | titlecase }}</p>
+        <p>Last login: {{ user.lastLogin ? (user.lastLogin | date: 'medium') : 'Never' }}</p>
+      </div>
+
+      <div class="user-meta">
+        <span class="status" [class.inactive]="!user.isActive">
+          {{ user.isActive ? 'Active' : 'Inactive' }}
+        </span>
+        <a mat-stroked-button [routerLink]="['/users', user.id, 'edit']">Edit</a>
+      </div>
+    </li>
+  </ul>
+</section>

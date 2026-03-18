@@ -32,9 +32,8 @@ export const SHELL_ROUTES: Routes = [
       },
       {
         path: ROUTE_PATHS.USERS,
-        loadComponent: () =>
-          import('../../features/users/pages/user-list/user-list.component')
-            .then((m) => m.UserListComponent)
+        loadChildren: () =>
+          import('../../features/users/users.routes').then((m) => m.USER_ROUTES)
       }
     ]
   }

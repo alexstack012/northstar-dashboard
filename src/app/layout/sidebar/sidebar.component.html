@@ -1,5 +1,5 @@
 <div class="sidebar-links">
-  <a matButton="elevated" *ngFor="let item of navItems"
+  <a matButton="elevated" *ngFor="let item of visibleNavItems"
      [routerLink]="item.path"
      routerLinkActive="active">
     {{ item.label }}

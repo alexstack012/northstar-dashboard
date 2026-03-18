@@ -1,7 +1,7 @@
 {
   "users": [
     {
-      "id": "1",
+      "id": 1,
       "name": "Alex Stack",
       "email": "alex@northstar.com",
       "role": "admin",
@@ -13,17 +13,45 @@
       "lastLogin": null,
       "createdAt": "2026-03-02T12:00:00Z",
       "updatedAt": "2026-03-02T12:00:00Z"
+    },
+    {
+      "id": 2,
+      "name": "Jordan Mills",
+      "email": "jordan@northstar.com",
+      "role": "recruiter",
+      "tenantId": 1,
+      "passwordHash": "$2b$10$o9/e3RS2uSWzvsUiBzUvnudAK7Q61uwtx06QvcLStFAptks6Pslhq",
+      "securityQuestion": "What was your first car?",
+      "securityAnswerHash": "$2b$10$aB5swg1MdaQ1wfrjun8.5uZz8ury1zv5Va7Gze75DFjH8tN09kjMy",
+      "isActive": true,
+      "lastLogin": "2026-03-11T15:20:00Z",
+      "createdAt": "2026-03-04T10:15:00Z",
+      "updatedAt": "2026-03-11T15:20:00Z"
+    },
+    {
+      "id": 3,
+      "name": "Taylor Greene",
+      "email": "taylor@northstar.com",
+      "role": "recruiter",
+      "tenantId": 1,
+      "passwordHash": "$2b$10$o9/e3RS2uSWzvsUiBzUvnudAK7Q61uwtx06QvcLStFAptks6Pslhq",
+      "securityQuestion": "What was your first car?",
+      "securityAnswerHash": "$2b$10$aB5swg1MdaQ1wfrjun8.5uZz8ury1zv5Va7Gze75DFjH8tN09kjMy",
+      "isActive": false,
+      "lastLogin": "2026-03-01T13:05:00Z",
+      "createdAt": "2026-02-20T08:00:00Z",
+      "updatedAt": "2026-03-08T09:30:00Z"
     }
   ],
   "tenants": [
     {
-      "id": "1",
+      "id": 1,
       "name": "Planet Fitness"
     }
   ],
   "jobs": [
     {
-      "id": "1",
+      "id": 1,
       "title": "Frontend Developer",
       "tenantId": 1,
       "status": "open"
@@ -31,7 +59,7 @@
   ],
   "candidates": [
     {
-      "id": "1",
+      "id": 1,
       "name": "Jane Doe",
       "email": "jane.doe@example.com",
       "phone": "555-0101",
@@ -40,7 +68,7 @@
       "notes": "Strong frontend portfolio. Interview feedback highlighted solid Angular fundamentals and strong communication."
     },
     {
-      "id": "2",
+      "id": 2,
       "name": "Marcus Rivera",
       "email": "marcus.rivera@example.com",
       "phone": "555-0134",

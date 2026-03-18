@@ -21,6 +21,8 @@ export class AuthService {
 
     const user = users[0];
 
+    if (!user.isActive) return false;
+
     const passwordMatch = await bcrypt.compare(password, user.passwordHash);
 
     if (!passwordMatch) return false;
@@ -40,6 +42,16 @@ export class AuthService {
   getCurrentUser(): User | null {
     const user = localStorage.getItem(this.STORAGE_KEY);
     return user ? JSON.parse(user) : null;
+  }
+
+  syncCurrentUser(user: User): void {
+    const currentUser = this.getCurrentUser();
+
+    if (!currentUser || currentUser.id !== user.id) {
+      return;
+    }
+
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(user));
   }
 
   setRedirectUrl(url: string) {

@@ -7,7 +7,9 @@ import { Job } from '../../../../core/models/job.model';
 import { JobService } from '../../../../core/services/job.service';
 import { ROUTE_PATHS } from '../../../../core/constants/route-paths.constants';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { JobFormComponent, JobFormDialogResult } from '../job-form/job-form.component';
 
 @Component({
   selector: 'app-job-detail',
@@ -21,6 +23,7 @@ export class JobDetailComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly jobService = inject(JobService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly dialog = inject(MatDialog);
 
   readonly job = signal<Job | null>(null);
   readonly loading = signal(false);
@@ -72,7 +75,21 @@ export class JobDetailComponent implements OnInit {
       return;
     }
 
-    this.router.navigate(['/', ROUTE_PATHS.JOBS, currentJob.id, ROUTE_PATHS.EDIT]);
+    this.dialog.open<JobFormComponent, { jobId: number }, JobFormDialogResult | undefined>(JobFormComponent, {
+      data: { jobId: currentJob.id },
+      width: '720px',
+      maxWidth: 'calc(100vw - 2rem)',
+      autoFocus: false
+    })
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        if (!result) {
+          return;
+        }
+
+        this.loadJob();
+      });
   }
 
   deleteJob(): void {

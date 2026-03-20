@@ -4,8 +4,10 @@ import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { Job } from '../../../../core/models/job.model';
 import { JobService } from '../../../../core/services/job.service';
+import { JobFormComponent, JobFormDialogResult } from '../job-form/job-form.component';
 
 @Component({
   selector: 'app-job-list',
@@ -17,6 +19,7 @@ import { JobService } from '../../../../core/services/job.service';
 export class JobListComponent implements OnInit {
   private readonly jobService = inject(JobService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly dialog = inject(MatDialog);
 
   readonly jobs = signal<Job[]>([]);
   readonly loading = signal(false);
@@ -44,5 +47,40 @@ export class JobListComponent implements OnInit {
         this.errorMessage.set('Unable to load jobs right now. Please try again.');
       }
     });
+  }
+
+  openCreateDialog(): void {
+    this.dialog.open<JobFormComponent, undefined, JobFormDialogResult | undefined>(JobFormComponent, {
+      width: '720px',
+      maxWidth: 'calc(100vw - 2rem)',
+      autoFocus: false
+    })
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        if (!result) {
+          return;
+        }
+
+        this.loadJobs();
+      });
+  }
+
+  openEditDialog(jobId: number): void {
+    this.dialog.open<JobFormComponent, { jobId: number }, JobFormDialogResult | undefined>(JobFormComponent, {
+      data: { jobId },
+      width: '720px',
+      maxWidth: 'calc(100vw - 2rem)',
+      autoFocus: false
+    })
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        if (!result) {
+          return;
+        }
+
+        this.loadJobs();
+      });
   }
 }

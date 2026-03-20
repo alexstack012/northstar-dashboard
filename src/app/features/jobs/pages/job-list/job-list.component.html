@@ -7,7 +7,7 @@
     </div>
 
     <div class="jobs-actions">
-      <a mat-stroked-button routerLink="/jobs/new">Create Job</a>
+      <button mat-stroked-button type="button" (click)="openCreateDialog()">Create Job</button>
       <button matButton="filled" type="button" (click)="loadJobs()" [disabled]="loading()">
         Refresh
       </button>
@@ -24,7 +24,7 @@
   <div *ngIf="!loading() && !errorMessage() && jobs().length === 0" class="empty-state">
     <h2>No jobs yet</h2>
     <p>Create the first role to start building out the hiring workflow.</p>
-    <a matButton="filled" routerLink="/jobs/new">Create Your First Job</a>
+    <button matButton="filled" type="button" (click)="openCreateDialog()">Create Your First Job</button>
   </div>
 
   <ul *ngIf="!loading() && !errorMessage() && jobs().length > 0" class="job-list">
@@ -38,7 +38,7 @@
 
       <div class="job-meta">
         <span class="status">{{ job.status | titlecase }}</span>
-        <a mat-stroked-button [routerLink]="['/jobs', job.id, 'edit']">Edit</a>
+        <button mat-stroked-button type="button" (click)="openEditDialog(job.id)">Edit</button>
       </div>
     </li>
   </ul>

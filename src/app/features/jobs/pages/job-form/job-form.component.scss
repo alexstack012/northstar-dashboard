@@ -1,6 +1,8 @@
-.job-form-page {
+.job-dialog {
   display: grid;
   gap: 1rem;
+  min-width: min(42rem, 100%);
+  padding: 1rem;
 }
 
 .job-form-header {
@@ -8,6 +10,7 @@
   display: flex;
   gap: 1rem;
   justify-content: space-between;
+  padding: 0 0 0.5rem;
 }
 
 .eyebrow {
@@ -32,6 +35,12 @@
 .job-form-card {
   border-radius: 18px;
   padding: 1.5rem;
+}
+
+.dialog-content {
+  display: grid;
+  gap: 1rem;
+  padding-top: 0.5rem;
 }
 
 .job-form {
@@ -69,6 +78,10 @@
 }
 
 @media (max-width: 720px) {
+  .job-dialog {
+    min-width: 0;
+  }
+
   .job-form-header {
     align-items: stretch;
     flex-direction: column;

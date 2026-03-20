@@ -1,21 +1,21 @@
-<section class="job-form-page">
-  <div class="job-form-header">
+<div class="job-dialog">
+  <div class="job-form-header" mat-dialog-title>
     <div>
       <p class="eyebrow">Jobs</p>
       <h1>{{ pageTitle() }}</h1>
       <p class="supporting-copy">{{ pageDescription() }}</p>
     </div>
 
-    <a mat-stroked-button [routerLink]="isEditMode ? ['/', 'jobs', jobId] : ['/', 'jobs']">
+    <button mat-stroked-button type="button" (click)="close()">
       Cancel
-    </a>
+    </button>
   </div>
 
-  <div *ngIf="errorMessage()" class="error-box">
-    {{ errorMessage() }}
-  </div>
+  <div mat-dialog-content class="dialog-content">
+    <div *ngIf="errorMessage()" class="error-box">
+      {{ errorMessage() }}
+    </div>
 
-  <mat-card class="job-form-card">
     <p *ngIf="loading()" class="status-message">Loading job details...</p>
 
     <form *ngIf="!loading()" [formGroup]="form" (ngSubmit)="submit()" class="job-form">
@@ -55,10 +55,10 @@
           {{ saving() ? 'Saving...' : (isEditMode ? 'Save Changes' : 'Create Job') }}
         </button>
 
-        <a mat-stroked-button [routerLink]="['/', 'jobs']">
-          Back to Jobs
-        </a>
+        <button mat-stroked-button type="button" (click)="close()">
+          Close
+        </button>
       </div>
     </form>
-  </mat-card>
-</section>
+  </div>
+</div>

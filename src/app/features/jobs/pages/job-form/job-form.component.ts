@@ -1,18 +1,25 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { ROUTE_PATHS } from '../../../../core/constants/route-paths.constants';
 import { JOB_STATUS_OPTIONS } from '../../../../core/constants/status.constants';
-import { JobFormValue } from '../../../../core/models/job.model';
+import { Job, JobFormValue } from '../../../../core/models/job.model';
 import { JobService } from '../../../../core/services/job.service';
+
+interface JobFormDialogData {
+  jobId?: number;
+}
+
+export interface JobFormDialogResult {
+  job: Job;
+  mode: 'create' | 'edit';
+}
 
 @Component({
   selector: 'app-job-form',
@@ -21,9 +28,8 @@ import { JobService } from '../../../../core/services/job.service';
     NgFor,
     NgIf,
     ReactiveFormsModule,
-    RouterLink,
     MatButtonModule,
-    MatCardModule,
+    MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule
@@ -33,10 +39,10 @@ import { JobService } from '../../../../core/services/job.service';
 })
 export class JobFormComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
-  private readonly route = inject(ActivatedRoute);
-  private readonly router = inject(Router);
   private readonly jobService = inject(JobService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly dialogRef = inject(MatDialogRef<JobFormComponent, JobFormDialogResult | undefined>);
+  private readonly dialogData = inject<JobFormDialogData>(MAT_DIALOG_DATA, { optional: true }) ?? {};
 
   readonly statusOptions = JOB_STATUS_OPTIONS;
   readonly loading = signal(false);
@@ -58,13 +64,11 @@ export class JobFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-
-    if (!id) {
+    if (!this.dialogData.jobId) {
       return;
     }
 
-    const parsedId = Number(id);
+    const parsedId = Number(this.dialogData.jobId);
 
     if (!Number.isInteger(parsedId) || parsedId <= 0) {
       this.errorMessage.set('The job you are trying to edit has an invalid id.');
@@ -98,14 +102,10 @@ export class JobFormComponent implements OnInit {
       )
       .subscribe({
         next: (job) => {
-          const destinationId = this.resolveNavigationId(job.id);
-
-          if (destinationId !== null) {
-            this.router.navigate(['/', ROUTE_PATHS.JOBS, destinationId]);
-            return;
-          }
-
-          this.router.navigate(['/', ROUTE_PATHS.JOBS]);
+          this.dialogRef.close({
+            job,
+            mode: this.isEditMode ? 'edit' : 'create'
+          });
         },
         error: () => {
           this.errorMessage.set(
@@ -115,15 +115,6 @@ export class JobFormComponent implements OnInit {
           );
         }
       });
-  }
-
-  private resolveNavigationId(returnedId: unknown): number | null {
-    if (this.isEditMode) {
-      return this.jobId;
-    }
-
-    const parsedId = Number(returnedId);
-    return Number.isInteger(parsedId) && parsedId > 0 ? parsedId : null;
   }
 
   private loadJob(id: number): void {
@@ -151,5 +142,9 @@ export class JobFormComponent implements OnInit {
           );
         }
       });
+  }
+
+  close(): void {
+    this.dialogRef.close();
   }
 }

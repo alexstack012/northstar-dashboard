@@ -1,25 +1,53 @@
-<mat-card class="login-card">
-  <h2>Northstar Dashboard</h2>
+<section class="login-page">
+  <div class="login-shell">
+    <div class="login-story">
+      <p class="eyebrow">Northstar Workforce Solutions</p>
+      <h1>Run the hiring pipeline from one clear operating view.</h1>
+      <p class="supporting-copy">
+        Manage roles, candidate movement, and internal team access from a single dashboard built for recruiters and operations leaders.
+      </p>
 
-  <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="story-grid">
+        <article class="story-card">
+          <span class="story-label">Hiring Demand</span>
+          <strong>Jobs, candidates, and placements stay connected.</strong>
+        </article>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Email</mat-label>
-      <input matInput formControlName="email" />
-    </mat-form-field>
+        <article class="story-card">
+          <span class="story-label">Team Control</span>
+          <strong>Admins can manage recruiter access and account health.</strong>
+        </article>
+      </div>
+    </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Password</mat-label>
-      <input matInput type="password" formControlName="password" />
-    </mat-form-field>
+    <mat-card class="login-card">
+      <div class="card-header">
+        <p class="eyebrow">Sign In</p>
+        <h2>Welcome back</h2>
+        <p>Use your Northstar account to continue into the workspace.</p>
+      </div>
 
-    <button mat-raised-button color="primary" type="submit" [disabled]="loading">
-      Login
-    </button>
+      <form [formGroup]="form" (ngSubmit)="submit()" class="login-form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" />
+        </mat-form-field>
 
-    <button mat-button type="button" routerLink="/forgot-password">
-      Forgot Password?
-    </button>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password" />
+        </mat-form-field>
 
-  </form>
-</mat-card>
+        <div class="form-actions">
+          <button matButton="filled" type="submit" [disabled]="loading">
+            {{ loading ? 'Signing In...' : 'Sign In' }}
+          </button>
+
+          <a mat-stroked-button routerLink="/forgot-password">
+            Forgot Password?
+          </a>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</section>

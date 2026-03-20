@@ -1,2 +1,128 @@
-<h1>Dashboard</h1>
-<p>Welcome to Northstar Dashboard.</p>
+<section class="dashboard-page">
+  <div class="hero-panel">
+    <div>
+      <p class="eyebrow">Northstar Workforce Solutions</p>
+      <h1>Good afternoon, {{ currentUserName() }}.</h1>
+      <p class="hero-copy">
+        Here’s the current operating picture across hiring demand, candidate flow, and internal account health.
+      </p>
+    </div>
+
+    <div class="hero-actions">
+      <a class="action-chip" routerLink="/jobs/new">Create Job</a>
+      <a class="action-chip" routerLink="/candidates/new">Add Candidate</a>
+      <a class="action-chip" routerLink="/users">Review Users</a>
+    </div>
+  </div>
+
+  <p *ngIf="loading()" class="status-message">Loading dashboard...</p>
+
+  <div *ngIf="!loading() && errorMessage()" class="error-box">
+    <p>{{ errorMessage() }}</p>
+    <button type="button" class="refresh-button" (click)="loadDashboard()">Try Again</button>
+  </div>
+
+  <div *ngIf="!loading() && !errorMessage()" class="dashboard-content">
+    <section class="metrics-grid">
+      <article *ngFor="let metric of metrics()" class="metric-card" [class]="metric.tone">
+        <p class="metric-label">{{ metric.label }}</p>
+        <h2>{{ metric.value }}</h2>
+        <p class="metric-detail">{{ metric.detail }}</p>
+      </article>
+    </section>
+
+    <section class="content-grid">
+      <article class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Pipeline Spotlight</p>
+            <h2>Candidate Momentum</h2>
+          </div>
+          <a routerLink="/candidates">Open candidates</a>
+        </div>
+
+        <div class="spotlight-grid">
+          <article *ngFor="let spotlight of pipelineSpotlights()" class="spotlight-card">
+            <p class="spotlight-title">{{ spotlight.title }}</p>
+            <strong>{{ spotlight.value }}</strong>
+            <p>{{ spotlight.description }}</p>
+          </article>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Open Roles</p>
+            <h2>Active Hiring Needs</h2>
+          </div>
+          <a routerLink="/jobs">Open jobs</a>
+        </div>
+
+        <div *ngIf="openJobs().length === 0" class="empty-panel">
+          No open roles right now.
+        </div>
+
+        <ul *ngIf="openJobs().length > 0" class="plain-list">
+          <li *ngFor="let job of openJobs()" class="list-row">
+            <div>
+              <a [routerLink]="['/jobs', job.id]">{{ job.title }}</a>
+              <p>Tenant {{ job.tenantId }}</p>
+            </div>
+            <span class="status-pill">{{ job.status | titlecase }}</span>
+          </li>
+        </ul>
+      </article>
+
+      <article class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Recent Candidates</p>
+            <h2>Pipeline Watchlist</h2>
+          </div>
+          <a routerLink="/candidates">View all</a>
+        </div>
+
+        <div *ngIf="recentCandidates().length === 0" class="empty-panel">
+          No candidate activity yet.
+        </div>
+
+        <ul *ngIf="recentCandidates().length > 0" class="plain-list">
+          <li *ngFor="let candidate of recentCandidates()" class="list-row">
+            <div>
+              <a [routerLink]="['/candidates', candidate.id]">{{ candidate.name }}</a>
+              <p>{{ candidate.jobTitle }}</p>
+            </div>
+            <span class="status-pill">{{ candidate.status | titlecase }}</span>
+          </li>
+        </ul>
+      </article>
+
+      <article class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Team Snapshot</p>
+            <h2>User Access Health</h2>
+          </div>
+          <a routerLink="/users">Manage users</a>
+        </div>
+
+        <div *ngIf="teamSnapshot().length === 0" class="empty-panel">
+          No user accounts are available yet.
+        </div>
+
+        <ul *ngIf="teamSnapshot().length > 0" class="plain-list">
+          <li *ngFor="let user of teamSnapshot()" class="list-row">
+            <div>
+              <a [routerLink]="['/users', user.id]">{{ user.name }}</a>
+              <p>{{ user.role | titlecase }} · {{ user.lastLogin ? (user.lastLogin | date: 'mediumDate') : 'No login yet' }}</p>
+            </div>
+            <span class="status-pill" [class.inactive]="!user.isActive">
+              {{ user.isActive ? 'Active' : 'Inactive' }}
+            </span>
+          </li>
+        </ul>
+      </article>
+    </section>
+  </div>
+</section>

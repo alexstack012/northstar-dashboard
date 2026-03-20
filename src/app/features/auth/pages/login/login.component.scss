@@ -1,0 +1,169 @@
+.login-page {
+  align-items: center;
+  background:
+    radial-gradient(circle at top left, rgba(215, 166, 188, 0.34), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(177, 205, 235, 0.34), transparent 28%),
+    radial-gradient(circle at center, rgba(255, 255, 255, 0.55), transparent 45%),
+    linear-gradient(135deg, #fffaf6 0%, #f8eef3 45%, #eef4fb 100%);
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 3rem;
+}
+
+.login-shell {
+  align-items: stretch;
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: minmax(0, 1.1fr) minmax(22rem, 28rem);
+  max-width: 1180px;
+  width: 100%;
+}
+
+.login-story {
+  align-self: center;
+  color: #2f242c;
+  padding: 2rem 1.5rem 2rem 1rem;
+  position: relative;
+}
+
+.login-story::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.34));
+  border: 1px solid rgba(223, 204, 214, 0.88);
+  border-radius: 32px;
+  box-shadow: 0 22px 52px rgba(74, 44, 63, 0.08);
+  content: '';
+  inset: 0;
+  position: absolute;
+}
+
+.login-story > * {
+  position: relative;
+  z-index: 1;
+}
+
+.eyebrow {
+  color: #7a5568;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.45rem;
+  text-transform: uppercase;
+}
+
+.login-story h1,
+.card-header h2 {
+  margin: 0;
+}
+
+.login-story h1 {
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
+  line-height: 1.05;
+  max-width: 12ch;
+}
+
+.supporting-copy {
+  color: #5b5259;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 1rem 0 0;
+  max-width: 38rem;
+}
+
+.story-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 1.75rem;
+}
+
+.story-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(247, 236, 242, 0.78));
+  border: 1px solid rgba(216, 192, 203, 0.95);
+  border-radius: 22px;
+  box-shadow: 0 16px 40px rgba(70, 43, 60, 0.1);
+  padding: 1.1rem 1.15rem;
+}
+
+.story-label {
+  color: #6d5a66;
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.story-card strong {
+  color: #352730;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.login-card {
+  align-self: center;
+  background: rgba(255, 250, 252, 0.94);
+  border: 1px solid #e3d5de;
+  border-radius: 28px;
+  box-shadow: 0 20px 48px rgba(72, 42, 62, 0.12);
+  padding: 2rem;
+}
+
+.card-header p:last-child {
+  color: #615863;
+  margin: 0.65rem 0 0;
+}
+
+.login-form {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 900px) {
+  .login-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .login-story {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .login-story h1 {
+    max-width: 16ch;
+  }
+}
+
+@media (max-width: 640px) {
+  .login-page {
+    padding: 1rem;
+  }
+
+  .story-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .login-card {
+    padding: 1.25rem;
+  }
+
+  .login-story {
+    padding: 1.25rem 1rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+}

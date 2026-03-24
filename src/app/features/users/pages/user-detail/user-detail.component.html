@@ -72,11 +72,6 @@
       </div>
 
       <div class="detail-item">
-        <span class="detail-label">Security Question</span>
-        <strong>{{ user()!.securityQuestion }}</strong>
-      </div>
-
-      <div class="detail-item">
         <span class="detail-label">Last Login</span>
         <strong>{{ user()!.lastLogin ? (user()!.lastLogin | date: 'medium') : 'Never' }}</strong>
       </div>

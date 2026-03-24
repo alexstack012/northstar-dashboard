@@ -8,6 +8,7 @@ import { CandidateService } from '../../../../core/services/candidate.service';
 import { JobService } from '../../../../core/services/job.service';
 import { UserService } from '../../../../core/services/user.service';
 import { Candidate } from '../../../../core/models/candidate.model';
+import { EntityId, toEntityKey } from '../../../../core/models/entity-id.type';
 import { Job } from '../../../../core/models/job.model';
 import { User } from '../../../../core/models/user.model';
 
@@ -25,14 +26,14 @@ interface PipelineSpotlight {
 }
 
 interface CandidateSnapshot {
-  id: number;
+  id: EntityId;
   name: string;
   status: Candidate['status'];
   jobTitle: string;
 }
 
 interface UserSnapshot {
-  id: number;
+  id: EntityId;
   name: string;
   role: User['role'];
   isActive: boolean;
@@ -166,16 +167,16 @@ export class DashboardHomeComponent implements OnInit {
   }
 
   private buildRecentCandidates(candidates: Candidate[], jobs: Job[]): CandidateSnapshot[] {
-    const jobTitles = new Map(jobs.map((job) => [job.id, job.title]));
+    const jobTitles = new Map(jobs.map((job) => [toEntityKey(job.id), job.title]));
 
     return [...candidates]
-      .sort((a, b) => b.id - a.id)
+      .sort((a, b) => toEntityKey(b.id).localeCompare(toEntityKey(a.id), undefined, { numeric: true }))
       .slice(0, 4)
       .map((candidate) => ({
         id: candidate.id,
         name: candidate.name,
         status: candidate.status,
-        jobTitle: jobTitles.get(candidate.jobId) ?? 'Unassigned Job'
+        jobTitle: jobTitles.get(toEntityKey(candidate.jobId)) ?? 'Unassigned Job'
       }));
   }
 

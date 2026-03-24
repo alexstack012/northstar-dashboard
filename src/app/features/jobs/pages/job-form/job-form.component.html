@@ -31,12 +31,9 @@
       <div class="two-column-grid">
         <mat-form-field appearance="outline">
           <mat-label>Tenant ID</mat-label>
-          <input matInput type="number" formControlName="tenantId" min="1" />
+          <input matInput formControlName="tenantId" />
           <mat-error *ngIf="form.controls.tenantId.hasError('required')">
             A tenant id is required.
-          </mat-error>
-          <mat-error *ngIf="form.controls.tenantId.hasError('min')">
-            Tenant id must be greater than 0.
           </mat-error>
         </mat-form-field>
 

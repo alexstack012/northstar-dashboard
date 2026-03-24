@@ -6,6 +6,7 @@ import { finalize } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ROUTE_PATHS } from '../../../../core/constants/route-paths.constants';
+import { toEntityKey } from '../../../../core/models/entity-id.type';
 import { User } from '../../../../core/models/user.model';
 import { AuthService } from '../../../../core/services/auth.service';
 import { UserService } from '../../../../core/services/user.service';
@@ -35,13 +36,15 @@ export class UserDetailComponent implements OnInit {
 
   get isCurrentUser(): boolean {
     const currentUser = this.authService.getCurrentUser();
-    return currentUser?.id === this.user()?.id;
+    const viewedUser = this.user();
+
+    return !!currentUser && !!viewedUser && toEntityKey(currentUser.id) === toEntityKey(viewedUser.id);
   }
 
   loadUser(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+    const id = this.route.snapshot.paramMap.get('id');
 
-    if (!Number.isFinite(id) || id <= 0) {
+    if (!id || toEntityKey(id).trim() === '') {
       this.errorMessage.set('Invalid user id.');
       this.user.set(null);
       this.loading.set(false);

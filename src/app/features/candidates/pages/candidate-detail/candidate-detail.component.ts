@@ -6,6 +6,7 @@ import { finalize, forkJoin } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ROUTE_PATHS } from '../../../../core/constants/route-paths.constants';
+import { toEntityKey } from '../../../../core/models/entity-id.type';
 import { Candidate } from '../../../../core/models/candidate.model';
 import { CandidateService } from '../../../../core/services/candidate.service';
 import { JobService } from '../../../../core/services/job.service';
@@ -38,9 +39,9 @@ export class CandidateDetailComponent implements OnInit {
   loadCandidate(): void {
     this.showDeleteConfirmation.set(false);
 
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+    const id = this.route.snapshot.paramMap.get('id');
 
-    if (!Number.isFinite(id) || id <= 0) {
+    if (!id || toEntityKey(id).trim() === '') {
       this.errorMessage.set('Invalid candidate id.');
       this.candidate.set(null);
       this.loading.set(false);
@@ -61,7 +62,9 @@ export class CandidateDetailComponent implements OnInit {
       .subscribe({
         next: ({ candidate, jobs }) => {
           this.candidate.set(candidate);
-          this.jobTitle.set(jobs.find((job) => job.id === candidate.jobId)?.title ?? 'Unassigned Job');
+          this.jobTitle.set(
+            jobs.find((job) => toEntityKey(job.id) === toEntityKey(candidate.jobId))?.title ?? 'Unassigned Job'
+          );
         },
         error: (error: { status?: number }) => {
           this.candidate.set(null);

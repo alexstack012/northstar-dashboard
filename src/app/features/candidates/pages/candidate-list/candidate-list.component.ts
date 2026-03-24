@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize, forkJoin } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
+import { toEntityKey } from '../../../../core/models/entity-id.type';
 import { Candidate } from '../../../../core/models/candidate.model';
 import { Job } from '../../../../core/models/job.model';
 import { CandidateService } from '../../../../core/services/candidate.service';
@@ -56,11 +57,11 @@ export class CandidateListComponent implements OnInit {
     candidates: Candidate[],
     jobs: Job[]
   ): Array<Candidate & { jobTitle: string }> {
-    const jobTitles = new Map(jobs.map((job) => [job.id, job.title]));
+    const jobTitles = new Map(jobs.map((job) => [toEntityKey(job.id), job.title]));
 
     return candidates.map((candidate) => ({
       ...candidate,
-      jobTitle: jobTitles.get(candidate.jobId) ?? 'Unassigned Job'
+      jobTitle: jobTitles.get(toEntityKey(candidate.jobId)) ?? 'Unassigned Job'
     }));
   }
 }

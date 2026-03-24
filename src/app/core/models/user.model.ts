@@ -1,13 +1,14 @@
 import { ROLES } from '../constants/roles.constants';
+import { EntityId } from './entity-id.type';
 
 export type UserRole = typeof ROLES[keyof typeof ROLES];
 
 export interface User {
-  id: number;
+  id: EntityId;
   name: string;
   email: string;
   role: UserRole;
-  tenantId: number;
+  tenantId: EntityId;
   passwordHash: string;
   securityQuestion: string;
   securityAnswerHash: string;
@@ -21,7 +22,7 @@ export interface UserFormValue {
   name: string;
   email: string;
   role: UserRole;
-  tenantId: number;
+  tenantId: EntityId;
   securityQuestion: string;
   isActive: boolean;
 }

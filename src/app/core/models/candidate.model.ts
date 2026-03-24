@@ -1,3 +1,5 @@
+import { EntityId } from './entity-id.type';
+
 export type CandidateStatus =
   | 'applied'
   | 'screening'
@@ -7,11 +9,11 @@ export type CandidateStatus =
   | 'rejected';
 
 export interface Candidate {
-  id: number;
+  id: EntityId;
   name: string;
   email: string;
   phone: string;
-  jobId: number;
+  jobId: EntityId;
   status: CandidateStatus;
   notes: string;
 }

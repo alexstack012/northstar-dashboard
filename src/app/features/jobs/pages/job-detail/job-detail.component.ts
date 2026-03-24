@@ -9,6 +9,7 @@ import { ROUTE_PATHS } from '../../../../core/constants/route-paths.constants';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { EntityId, toEntityKey } from '../../../../core/models/entity-id.type';
 import { JobFormComponent, JobFormDialogResult } from '../job-form/job-form.component';
 
 @Component({
@@ -38,9 +39,9 @@ export class JobDetailComponent implements OnInit {
   loadJob(): void {
     this.showDeleteConfirmation.set(false);
 
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+    const id = this.route.snapshot.paramMap.get('id');
 
-    if (!Number.isFinite(id) || id <= 0) {
+    if (!id || toEntityKey(id).trim() === '') {
       this.errorMessage.set('Invalid job id.');
       this.job.set(null);
       this.loading.set(false);
@@ -75,7 +76,7 @@ export class JobDetailComponent implements OnInit {
       return;
     }
 
-    this.dialog.open<JobFormComponent, { jobId: number }, JobFormDialogResult | undefined>(JobFormComponent, {
+    this.dialog.open<JobFormComponent, { jobId: EntityId }, JobFormDialogResult | undefined>(JobFormComponent, {
       data: { jobId: currentJob.id },
       width: '720px',
       maxWidth: 'calc(100vw - 2rem)',

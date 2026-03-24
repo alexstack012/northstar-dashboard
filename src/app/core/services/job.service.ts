@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_ENDPOINTS } from '../constants/api-endpoints.constants';
 import { Job, JobFormValue } from '../models/job.model';
+import { EntityId } from '../models/entity-id.type';
 
 @Injectable({ providedIn: 'root' })
 export class JobService {
@@ -12,7 +13,7 @@ export class JobService {
     return this.http.get<Job[]>(API_ENDPOINTS.JOBS);
   }
 
-  getJobById(id: number): Observable<Job> {
+  getJobById(id: EntityId): Observable<Job> {
     return this.http.get<Job>(`${API_ENDPOINTS.JOBS}/${id}`);
   }
 
@@ -20,11 +21,11 @@ export class JobService {
     return this.http.post<Job>(API_ENDPOINTS.JOBS, job);
   }
 
-  updateJob(id: number, job: JobFormValue): Observable<Job> {
+  updateJob(id: EntityId, job: JobFormValue): Observable<Job> {
     return this.http.put<Job>(`${API_ENDPOINTS.JOBS}/${id}`, job);
   }
 
-  deleteJob(id: number): Observable<void> {
+  deleteJob(id: EntityId): Observable<void> {
     return this.http.delete<void>(`${API_ENDPOINTS.JOBS}/${id}`);
   }
 }

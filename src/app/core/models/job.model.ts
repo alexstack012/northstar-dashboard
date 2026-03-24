@@ -1,9 +1,11 @@
+import { EntityId } from './entity-id.type';
+
 export type JobStatus = 'open' | 'closed' | 'draft' | 'paused';
 
 export interface Job {
-  id: number;
+  id: EntityId;
   title: string;
-  tenantId: number;
+  tenantId: EntityId;
   status: JobStatus;
 }
 

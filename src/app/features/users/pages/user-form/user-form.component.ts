@@ -13,6 +13,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { CONSTANTS } from '../../../../core/constants/constants';
 import { ROUTE_PATHS } from '../../../../core/constants/route-paths.constants';
 import { ROLES } from '../../../../core/constants/roles.constants';
+import { EntityId, toEntityKey } from '../../../../core/models/entity-id.type';
 import { User, UserRole } from '../../../../core/models/user.model';
 import { AuthService } from '../../../../core/services/auth.service';
 import { UserService } from '../../../../core/services/user.service';
@@ -53,14 +54,14 @@ export class UserFormComponent implements OnInit {
   ];
   readonly securityQuestions: readonly string[] = CONSTANTS.SECURITY_QUESTIONS;
 
-  userId: number | null = null;
+  userId: EntityId | null = null;
   private existingUser: User | null = null;
 
   readonly form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.maxLength(80)]],
     email: ['', [Validators.required, Validators.email]],
     role: [ROLES.RECRUITER as UserRole, Validators.required],
-    tenantId: [1, [Validators.required, Validators.min(1)]],
+    tenantId: ['1' as EntityId, Validators.required],
     securityQuestion: [this.securityQuestions[0] as string, Validators.required],
     securityAnswer: ['', Validators.required],
     password: ['', [Validators.required, Validators.minLength(6)]],
@@ -78,21 +79,19 @@ export class UserFormComponent implements OnInit {
       return;
     }
 
-    const parsedId = Number(id);
-
-    if (!Number.isInteger(parsedId) || parsedId <= 0) {
+    if (toEntityKey(id).trim() === '') {
       this.errorMessage.set('The user you are trying to edit has an invalid id.');
       return;
     }
 
-    this.userId = parsedId;
+    this.userId = id;
     this.pageTitle.set('Edit User');
     this.pageDescription.set('Update account access, password details, and activation status.');
     this.form.controls.password.setValidators([Validators.minLength(6)]);
     this.form.controls.password.updateValueAndValidity();
     this.form.controls.securityAnswer.clearValidators();
     this.form.controls.securityAnswer.updateValueAndValidity();
-    this.loadUser(parsedId);
+    this.loadUser(id);
   }
 
   async submit(): Promise<void> {
@@ -134,7 +133,7 @@ export class UserFormComponent implements OnInit {
     }
   }
 
-  private loadUser(id: number): void {
+  private loadUser(id: EntityId): void {
     this.loading.set(true);
     this.errorMessage.set('');
 

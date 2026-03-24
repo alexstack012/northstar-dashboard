@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
+import { EntityId } from '../../../../core/models/entity-id.type';
 import { MatDialog } from '@angular/material/dialog';
 import { Job } from '../../../../core/models/job.model';
 import { JobService } from '../../../../core/services/job.service';
@@ -66,8 +67,8 @@ export class JobListComponent implements OnInit {
       });
   }
 
-  openEditDialog(jobId: number): void {
-    this.dialog.open<JobFormComponent, { jobId: number }, JobFormDialogResult | undefined>(JobFormComponent, {
+  openEditDialog(jobId: EntityId): void {
+    this.dialog.open<JobFormComponent, { jobId: EntityId }, JobFormDialogResult | undefined>(JobFormComponent, {
       data: { jobId },
       width: '720px',
       maxWidth: 'calc(100vw - 2rem)',

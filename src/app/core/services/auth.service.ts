@@ -4,6 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import * as bcrypt from 'bcryptjs';
 import { API_ENDPOINTS } from '../constants/api-endpoints.constants';
 import { User } from '../models/user.model';
+import { toEntityKey } from '../models/entity-id.type';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -47,7 +48,7 @@ export class AuthService {
   syncCurrentUser(user: User): void {
     const currentUser = this.getCurrentUser();
 
-    if (!currentUser || currentUser.id !== user.id) {
+    if (!currentUser || toEntityKey(currentUser.id) !== toEntityKey(user.id)) {
       return;
     }
 

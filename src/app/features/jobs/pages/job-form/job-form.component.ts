@@ -11,9 +11,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { JOB_STATUS_OPTIONS } from '../../../../core/constants/status.constants';
 import { Job, JobFormValue } from '../../../../core/models/job.model';
 import { JobService } from '../../../../core/services/job.service';
+import { EntityId, toEntityKey } from '../../../../core/models/entity-id.type';
 
 interface JobFormDialogData {
-  jobId?: number;
+  jobId?: EntityId;
 }
 
 export interface JobFormDialogResult {
@@ -51,11 +52,11 @@ export class JobFormComponent implements OnInit {
   readonly pageTitle = signal('Create Job');
   readonly pageDescription = signal('Add a new role to the Northstar pipeline.');
 
-  jobId: number | null = null;
+  jobId: EntityId | null = null;
 
   readonly form = this.fb.nonNullable.group({
     title: ['', [Validators.required, Validators.maxLength(100)]],
-    tenantId: [1, [Validators.required, Validators.min(1)]],
+    tenantId: ['1' as EntityId, Validators.required],
     status: ['draft' as JobFormValue['status'], Validators.required]
   });
 
@@ -68,17 +69,17 @@ export class JobFormComponent implements OnInit {
       return;
     }
 
-    const parsedId = Number(this.dialogData.jobId);
+    const dialogJobId = this.dialogData.jobId;
 
-    if (!Number.isInteger(parsedId) || parsedId <= 0) {
+    if (dialogJobId === undefined || dialogJobId === null || toEntityKey(dialogJobId).trim() === '') {
       this.errorMessage.set('The job you are trying to edit has an invalid id.');
       return;
     }
 
-    this.jobId = parsedId;
+    this.jobId = dialogJobId;
     this.pageTitle.set('Edit Job');
     this.pageDescription.set('Update the role details and current hiring status.');
-    this.loadJob(parsedId);
+    this.loadJob(dialogJobId);
   }
 
   submit(): void {
@@ -117,7 +118,7 @@ export class JobFormComponent implements OnInit {
       });
   }
 
-  private loadJob(id: number): void {
+  private loadJob(id: EntityId): void {
     this.loading.set(true);
     this.errorMessage.set('');
 

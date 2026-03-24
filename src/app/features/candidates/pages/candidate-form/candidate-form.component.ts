@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ROUTE_PATHS } from '../../../../core/constants/route-paths.constants';
 import { CANDIDATE_STATUS_OPTIONS } from '../../../../core/constants/status.constants';
+import { EntityId, toEntityKey } from '../../../../core/models/entity-id.type';
 import { CandidateFormValue } from '../../../../core/models/candidate.model';
 import { Job } from '../../../../core/models/job.model';
 import { CandidateService } from '../../../../core/services/candidate.service';
@@ -49,13 +50,13 @@ export class CandidateFormComponent implements OnInit {
   readonly pageTitle = signal('Add Candidate');
   readonly pageDescription = signal('Create a new candidate record and connect it to an open role.');
 
-  candidateId: number | null = null;
+  candidateId: EntityId | null = null;
 
   readonly form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.maxLength(80)]],
     email: ['', [Validators.required, Validators.email]],
     phone: ['', [Validators.required, Validators.maxLength(20)]],
-    jobId: [0, [Validators.required, Validators.min(1)]],
+    jobId: ['' as EntityId, Validators.required],
     status: ['applied' as CandidateFormValue['status'], Validators.required],
     notes: ['', [Validators.required, Validators.maxLength(500)]]
   });
@@ -72,17 +73,15 @@ export class CandidateFormComponent implements OnInit {
       return;
     }
 
-    const parsedId = Number(id);
-
-    if (!Number.isInteger(parsedId) || parsedId <= 0) {
+    if (toEntityKey(id).trim() === '') {
       this.errorMessage.set('The candidate you are trying to edit has an invalid id.');
       return;
     }
 
-    this.candidateId = parsedId;
+    this.candidateId = id;
     this.pageTitle.set('Edit Candidate');
     this.pageDescription.set('Update contact information, notes, and pipeline status.');
-    this.loadCandidateAndJobs(parsedId);
+    this.loadCandidateAndJobs(id);
   }
 
   submit(): void {
@@ -125,13 +124,17 @@ export class CandidateFormComponent implements OnInit {
       });
   }
 
-  private resolveNavigationId(returnedId: unknown): number | null {
+  private resolveNavigationId(returnedId: unknown): EntityId | null {
     if (this.isEditMode) {
       return this.candidateId;
     }
 
-    const parsedId = Number(returnedId);
-    return Number.isInteger(parsedId) && parsedId > 0 ? parsedId : null;
+    if (returnedId === null || returnedId === undefined) {
+      return null;
+    }
+
+    const normalizedId = String(returnedId).trim();
+    return normalizedId ? normalizedId : null;
   }
 
   private loadJobs(): void {
@@ -153,7 +156,7 @@ export class CandidateFormComponent implements OnInit {
       });
   }
 
-  private loadCandidateAndJobs(id: number): void {
+  private loadCandidateAndJobs(id: EntityId): void {
     this.loading.set(true);
     this.errorMessage.set('');
 

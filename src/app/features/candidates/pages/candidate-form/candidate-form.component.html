@@ -56,7 +56,7 @@
               {{ job.title }}
             </mat-option>
           </mat-select>
-          <mat-error *ngIf="form.controls.jobId.hasError('min') || form.controls.jobId.hasError('required')">
+          <mat-error *ngIf="form.controls.jobId.hasError('required')">
             Select a job for this candidate.
           </mat-error>
         </mat-form-field>

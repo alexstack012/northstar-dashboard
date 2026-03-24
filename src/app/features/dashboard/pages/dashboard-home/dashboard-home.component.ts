@@ -6,10 +6,12 @@ import { finalize, forkJoin } from 'rxjs';
 import { AuthService } from '../../../../core/services/auth.service';
 import { CandidateService } from '../../../../core/services/candidate.service';
 import { JobService } from '../../../../core/services/job.service';
+import { TenantService } from '../../../../core/services/tenant.service';
 import { UserService } from '../../../../core/services/user.service';
 import { Candidate } from '../../../../core/models/candidate.model';
 import { EntityId, toEntityKey } from '../../../../core/models/entity-id.type';
 import { Job } from '../../../../core/models/job.model';
+import { Tenant } from '../../../../core/models/tenant.model';
 import { User } from '../../../../core/models/user.model';
 
 interface DashboardMetric {
@@ -38,6 +40,14 @@ interface UserSnapshot {
   role: User['role'];
   isActive: boolean;
   lastLogin: string | null;
+  tenantName: string;
+}
+
+interface OpenJobSnapshot {
+  id: EntityId;
+  title: string;
+  status: Job['status'];
+  tenantName: string;
 }
 
 @Component({
@@ -51,6 +61,7 @@ export class DashboardHomeComponent implements OnInit {
   private readonly jobService = inject(JobService);
   private readonly candidateService = inject(CandidateService);
   private readonly userService = inject(UserService);
+  private readonly tenantService = inject(TenantService);
   private readonly authService = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -60,7 +71,7 @@ export class DashboardHomeComponent implements OnInit {
   readonly pipelineSpotlights = signal<PipelineSpotlight[]>([]);
   readonly recentCandidates = signal<CandidateSnapshot[]>([]);
   readonly teamSnapshot = signal<UserSnapshot[]>([]);
-  readonly openJobs = signal<Job[]>([]);
+  readonly openJobs = signal<OpenJobSnapshot[]>([]);
   readonly currentUserName = signal('Team');
 
   ngOnInit(): void {
@@ -75,19 +86,20 @@ export class DashboardHomeComponent implements OnInit {
     forkJoin({
       jobs: this.jobService.getJobs(),
       candidates: this.candidateService.getCandidates(),
-      users: this.userService.getUsers()
+      users: this.userService.getUsers(),
+      tenants: this.tenantService.getTenants()
     })
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         finalize(() => this.loading.set(false))
       )
       .subscribe({
-        next: ({ jobs, candidates, users }) => {
+        next: ({ jobs, candidates, users, tenants }) => {
           this.metrics.set(this.buildMetrics(jobs, candidates, users));
           this.pipelineSpotlights.set(this.buildPipelineSpotlights(candidates));
           this.recentCandidates.set(this.buildRecentCandidates(candidates, jobs));
-          this.teamSnapshot.set(this.buildTeamSnapshot(users));
-          this.openJobs.set(jobs.filter((job) => job.status === 'open').slice(0, 4));
+          this.teamSnapshot.set(this.buildTeamSnapshot(users, tenants));
+          this.openJobs.set(this.buildOpenJobs(jobs, tenants));
         },
         error: () => {
           this.metrics.set([]);
@@ -180,7 +192,23 @@ export class DashboardHomeComponent implements OnInit {
       }));
   }
 
-  private buildTeamSnapshot(users: User[]): UserSnapshot[] {
+  private buildOpenJobs(jobs: Job[], tenants: Tenant[]): OpenJobSnapshot[] {
+    const tenantNames = new Map(tenants.map((tenant) => [toEntityKey(tenant.id), tenant.name]));
+
+    return jobs
+      .filter((job) => job.status === 'open')
+      .slice(0, 4)
+      .map((job) => ({
+        id: job.id,
+        title: job.title,
+        status: job.status,
+        tenantName: tenantNames.get(toEntityKey(job.tenantId)) ?? `Tenant ${job.tenantId}`
+      }));
+  }
+
+  private buildTeamSnapshot(users: User[], tenants: Tenant[]): UserSnapshot[] {
+    const tenantNames = new Map(tenants.map((tenant) => [toEntityKey(tenant.id), tenant.name]));
+
     return [...users]
       .sort((a, b) => {
         if (a.isActive !== b.isActive) {
@@ -202,7 +230,8 @@ export class DashboardHomeComponent implements OnInit {
         name: user.name,
         role: user.role,
         isActive: user.isActive,
-        lastLogin: user.lastLogin
+        lastLogin: user.lastLogin,
+        tenantName: tenantNames.get(toEntityKey(user.tenantId)) ?? `Tenant ${user.tenantId}`
       }));
   }
 }

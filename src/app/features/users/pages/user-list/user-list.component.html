@@ -34,7 +34,7 @@
           <a [routerLink]="['/users', user.id]">{{ user.name }}</a>
         </h3>
         <p>{{ user.email }}</p>
-        <p>Tenant {{ user.tenantId }} · {{ user.role | titlecase }}</p>
+        <p>{{ getTenantName(user.tenantId) }} - {{ user.role | titlecase }}</p>
         <p>Last login: {{ user.lastLogin ? (user.lastLogin | date: 'medium') : 'Never' }}</p>
       </div>
 

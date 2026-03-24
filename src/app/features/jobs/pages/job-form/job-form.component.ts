@@ -10,8 +10,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { JOB_STATUS_OPTIONS } from '../../../../core/constants/status.constants';
 import { Job, JobFormValue } from '../../../../core/models/job.model';
+import { Tenant } from '../../../../core/models/tenant.model';
 import { JobService } from '../../../../core/services/job.service';
 import { EntityId, toEntityKey } from '../../../../core/models/entity-id.type';
+import { TenantService } from '../../../../core/services/tenant.service';
 
 interface JobFormDialogData {
   jobId?: EntityId;
@@ -41,6 +43,7 @@ export interface JobFormDialogResult {
 export class JobFormComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly jobService = inject(JobService);
+  private readonly tenantService = inject(TenantService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly dialogRef = inject(MatDialogRef<JobFormComponent, JobFormDialogResult | undefined>);
   private readonly dialogData = inject<JobFormDialogData>(MAT_DIALOG_DATA, { optional: true }) ?? {};
@@ -51,6 +54,7 @@ export class JobFormComponent implements OnInit {
   readonly errorMessage = signal('');
   readonly pageTitle = signal('Create Job');
   readonly pageDescription = signal('Add a new role to the Northstar pipeline.');
+  readonly tenants = signal<Tenant[]>([]);
 
   jobId: EntityId | null = null;
 
@@ -65,6 +69,8 @@ export class JobFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadTenants();
+
     if (!this.dialogData.jobId) {
       return;
     }
@@ -147,5 +153,18 @@ export class JobFormComponent implements OnInit {
 
   close(): void {
     this.dialogRef.close();
+  }
+
+  private loadTenants(): void {
+    this.tenantService.getTenants()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (tenants) => {
+          this.tenants.set(tenants);
+        },
+        error: () => {
+          this.errorMessage.set('Unable to load tenant options right now. Please try again.');
+        }
+      });
   }
 }

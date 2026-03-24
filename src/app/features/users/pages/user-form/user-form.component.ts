@@ -14,8 +14,10 @@ import { CONSTANTS } from '../../../../core/constants/constants';
 import { ROUTE_PATHS } from '../../../../core/constants/route-paths.constants';
 import { ROLES } from '../../../../core/constants/roles.constants';
 import { EntityId, toEntityKey } from '../../../../core/models/entity-id.type';
+import { Tenant } from '../../../../core/models/tenant.model';
 import { User, UserRole } from '../../../../core/models/user.model';
 import { AuthService } from '../../../../core/services/auth.service';
+import { TenantService } from '../../../../core/services/tenant.service';
 import { UserService } from '../../../../core/services/user.service';
 
 @Component({
@@ -41,6 +43,7 @@ export class UserFormComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly userService = inject(UserService);
   private readonly authService = inject(AuthService);
+  private readonly tenantService = inject(TenantService);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly loading = signal(false);
@@ -48,6 +51,7 @@ export class UserFormComponent implements OnInit {
   readonly errorMessage = signal('');
   readonly pageTitle = signal('Create User');
   readonly pageDescription = signal('Add an administrator or recruiter account to the Northstar workspace.');
+  readonly tenants = signal<Tenant[]>([]);
   readonly roleOptions: ReadonlyArray<{ value: UserRole; label: string }> = [
     { value: ROLES.ADMIN, label: 'Admin' },
     { value: ROLES.RECRUITER, label: 'Recruiter' }
@@ -73,6 +77,8 @@ export class UserFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadTenants();
+
     const id = this.route.snapshot.paramMap.get('id');
 
     if (!id) {
@@ -190,5 +196,18 @@ export class UserFormComponent implements OnInit {
       createdAt: this.existingUser?.createdAt ?? now,
       updatedAt: now
     };
+  }
+
+  private loadTenants(): void {
+    this.tenantService.getTenants()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (tenants) => {
+          this.tenants.set(tenants);
+        },
+        error: () => {
+          this.errorMessage.set('Unable to load tenant options right now. Please try again.');
+        }
+      });
   }
 }

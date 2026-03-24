@@ -30,10 +30,14 @@
 
       <div class="two-column-grid">
         <mat-form-field appearance="outline">
-          <mat-label>Tenant ID</mat-label>
-          <input matInput formControlName="tenantId" />
+          <mat-label>Tenant</mat-label>
+          <mat-select formControlName="tenantId">
+            <mat-option *ngFor="let tenant of tenants()" [value]="tenant.id">
+              {{ tenant.name }}
+            </mat-option>
+          </mat-select>
           <mat-error *ngIf="form.controls.tenantId.hasError('required')">
-            A tenant id is required.
+            A tenant is required.
           </mat-error>
         </mat-form-field>
 

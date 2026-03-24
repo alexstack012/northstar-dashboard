@@ -33,7 +33,7 @@
         <h3 class="job-title">
           <a [routerLink]="['/jobs', job.id]">{{ job.title }}</a>
         </h3>
-        <p>Tenant ID: {{ job.tenantId }}</p>
+        <p>{{ getTenantName(job.tenantId) }}</p>
       </div>
 
       <div class="job-meta">

@@ -4,12 +4,12 @@
       <p class="eyebrow">Northstar Workforce Solutions</p>
       <h1>Good afternoon, {{ currentUserName() }}.</h1>
       <p class="hero-copy">
-        Here’s the current operating picture across hiring demand, candidate flow, and internal account health.
+        Here's the current operating picture across hiring demand, candidate flow, and internal account health.
       </p>
     </div>
 
     <div class="hero-actions">
-      <a class="action-chip" routerLink="/jobs/new">Create Job</a>
+      <a class="action-chip" routerLink="/jobs">Open Jobs</a>
       <a class="action-chip" routerLink="/candidates/new">Add Candidate</a>
       <a class="action-chip" routerLink="/users">Review Users</a>
     </div>
@@ -67,7 +67,7 @@
           <li *ngFor="let job of openJobs()" class="list-row">
             <div>
               <a [routerLink]="['/jobs', job.id]">{{ job.title }}</a>
-              <p>Tenant {{ job.tenantId }}</p>
+              <p>{{ job.tenantName }}</p>
             </div>
             <span class="status-pill">{{ job.status | titlecase }}</span>
           </li>
@@ -115,7 +115,7 @@
           <li *ngFor="let user of teamSnapshot()" class="list-row">
             <div>
               <a [routerLink]="['/users', user.id]">{{ user.name }}</a>
-              <p>{{ user.role | titlecase }} · {{ user.lastLogin ? (user.lastLogin | date: 'mediumDate') : 'No login yet' }}</p>
+              <p>{{ user.tenantName }} - {{ user.role | titlecase }} - {{ user.lastLogin ? (user.lastLogin | date: 'mediumDate') : 'No login yet' }}</p>
             </div>
             <span class="status-pill" [class.inactive]="!user.isActive">
               {{ user.isActive ? 'Active' : 'Inactive' }}

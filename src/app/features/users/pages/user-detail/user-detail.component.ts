@@ -9,6 +9,7 @@ import { ROUTE_PATHS } from '../../../../core/constants/route-paths.constants';
 import { toEntityKey } from '../../../../core/models/entity-id.type';
 import { User } from '../../../../core/models/user.model';
 import { AuthService } from '../../../../core/services/auth.service';
+import { TenantService } from '../../../../core/services/tenant.service';
 import { UserService } from '../../../../core/services/user.service';
 
 @Component({
@@ -23,12 +24,14 @@ export class UserDetailComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly userService = inject(UserService);
   private readonly authService = inject(AuthService);
+  private readonly tenantService = inject(TenantService);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly user = signal<User | null>(null);
   readonly loading = signal(false);
   readonly updatingStatus = signal(false);
   readonly errorMessage = signal('');
+  readonly tenantName = signal('Tenant');
 
   ngOnInit(): void {
     this.loadUser();
@@ -62,9 +65,11 @@ export class UserDetailComponent implements OnInit {
       .subscribe({
         next: (user) => {
           this.user.set(user);
+          this.loadTenantName(user.tenantId);
         },
         error: (error: { status?: number }) => {
           this.user.set(null);
+          this.tenantName.set('Tenant');
           this.errorMessage.set(
             error.status === 404
               ? 'User not found.'
@@ -109,6 +114,20 @@ export class UserDetailComponent implements OnInit {
         },
         error: () => {
           this.errorMessage.set('Unable to update this user right now. Please try again.');
+        }
+      });
+  }
+
+  private loadTenantName(tenantId: string | number): void {
+    this.tenantService.getTenants()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (tenants) => {
+          const tenant = tenants.find((item) => toEntityKey(item.id) === toEntityKey(tenantId));
+          this.tenantName.set(tenant?.name ?? `Tenant ${tenantId}`);
+        },
+        error: () => {
+          this.tenantName.set(`Tenant ${tenantId}`);
         }
       });
   }

@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { EntityId, toEntityKey } from '../../../../core/models/entity-id.type';
+import { TenantService } from '../../../../core/services/tenant.service';
 import { JobFormComponent, JobFormDialogResult } from '../job-form/job-form.component';
 
 @Component({
@@ -23,6 +24,7 @@ export class JobDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly jobService = inject(JobService);
+  private readonly tenantService = inject(TenantService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly dialog = inject(MatDialog);
 
@@ -31,6 +33,7 @@ export class JobDetailComponent implements OnInit {
   readonly deleting = signal(false);
   readonly showDeleteConfirmation = signal(false);
   readonly errorMessage = signal('');
+  readonly tenantName = signal('Tenant');
 
   ngOnInit(): void {
     this.loadJob();
@@ -59,9 +62,11 @@ export class JobDetailComponent implements OnInit {
       .subscribe({
       next: (job) => {
         this.job.set(job);
+        this.loadTenantName(job.tenantId);
       },
       error: (error: { status?: number }) => {
         this.job.set(null);
+        this.tenantName.set('Tenant');
         this.errorMessage.set(error.status === 404
           ? 'Job not found.'
           : 'Unable to load this job right now. Please try again.');
@@ -124,5 +129,19 @@ export class JobDetailComponent implements OnInit {
 
   cancelDelete(): void {
     this.showDeleteConfirmation.set(false);
+  }
+
+  private loadTenantName(tenantId: EntityId): void {
+    this.tenantService.getTenants()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (tenants) => {
+          const tenant = tenants.find((item) => toEntityKey(item.id) === toEntityKey(tenantId));
+          this.tenantName.set(tenant?.name ?? `Tenant ${tenantId}`);
+        },
+        error: () => {
+          this.tenantName.set(`Tenant ${tenantId}`);
+        }
+      });
   }
 }

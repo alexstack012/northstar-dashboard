@@ -5,12 +5,12 @@
       "name": "Alex Stack",
       "email": "alex@northstar.com",
       "role": "admin",
-      "tenantId": 1,
+      "tenantId": "1",
       "passwordHash": "$2b$10$o9/e3RS2uSWzvsUiBzUvnudAK7Q61uwtx06QvcLStFAptks6Pslhq",
       "securityQuestion": "What was your first car?",
       "securityAnswerHash": "$2b$10$aB5swg1MdaQ1wfrjun8.5uZz8ury1zv5Va7Gze75DFjH8tN09kjMy",
       "isActive": true,
-      "lastLogin": "2026-03-20T25:20:00Z",
+      "lastLogin": "2026-03-20T15:20:00Z",
       "createdAt": "2026-03-02T12:00:00Z",
       "updatedAt": "2026-03-02T12:00:00Z"
     },
@@ -19,7 +19,7 @@
       "name": "Jordan Mills",
       "email": "jordan@northstar.com",
       "role": "recruiter",
-      "tenantId": 1,
+      "tenantId": "1",
       "passwordHash": "$2b$10$o9/e3RS2uSWzvsUiBzUvnudAK7Q61uwtx06QvcLStFAptks6Pslhq",
       "securityQuestion": "What was your first car?",
       "securityAnswerHash": "$2b$10$aB5swg1MdaQ1wfrjun8.5uZz8ury1zv5Va7Gze75DFjH8tN09kjMy",
@@ -33,7 +33,7 @@
       "name": "Taylor Greene",
       "email": "taylor@northstar.com",
       "role": "recruiter",
-      "tenantId": 1,
+      "tenantId": "1",
       "passwordHash": "$2b$10$o9/e3RS2uSWzvsUiBzUvnudAK7Q61uwtx06QvcLStFAptks6Pslhq",
       "securityQuestion": "What was your first car?",
       "securityAnswerHash": "$2b$10$aB5swg1MdaQ1wfrjun8.5uZz8ury1zv5Va7Gze75DFjH8tN09kjMy",
@@ -46,55 +46,49 @@
   "tenants": [
     {
       "id": "1",
-      "name": "Planet Fitness"
+      "name": "Northstar Internal"
     },
     {
       "id": "2",
-      "name": "Anytime Fitness"
+      "name": "Peak Performance Group"
     }
   ],
   "jobs": [
     {
       "id": "1",
       "title": "Frontend Developer",
-      "tenantId": 1,
+      "tenantId": "1",
       "status": "open"
     },
     {
       "id": "2",
       "title": "Full Stack Developer",
-      "tenantId": 2,
+      "tenantId": "2",
       "status": "draft"
     },
     {
       "id": "3",
       "title": "Recruiting Coordinator",
-      "tenantId": 1,
+      "tenantId": "1",
       "status": "open"
     },
     {
       "id": "4",
       "title": "Operations Analyst",
-      "tenantId": 1,
+      "tenantId": "1",
       "status": "paused"
     },
     {
       "id": "5",
       "title": "Client Success Manager",
-      "tenantId": 2,
+      "tenantId": "2",
       "status": "closed"
     },
     {
       "id": "6",
       "title": "Senior Angular Engineer",
-      "tenantId": 2,
+      "tenantId": "2",
       "status": "open"
-    },
-    {
-      "id": "93b5",
-      "title": "test",
-      "tenantId": 1,
-      "status": "draft"
     }
   ],
   "candidates": [
@@ -103,7 +97,7 @@
       "name": "Jane Doe",
       "email": "jane.doe@example.com",
       "phone": "555-0101",
-      "jobId": 1,
+      "jobId": "1",
       "status": "interview",
       "notes": "Strong frontend portfolio. Interview feedback highlighted solid Angular fundamentals and strong communication."
     },
@@ -112,7 +106,7 @@
       "name": "Marcus Rivera",
       "email": "marcus.rivera@example.com",
       "phone": "555-0134",
-      "jobId": 1,
+      "jobId": "1",
       "status": "screening",
       "notes": "Initial recruiter call scheduled. Previous agency experience and good client-facing background."
     },
@@ -121,7 +115,7 @@
       "name": "Priya Shah",
       "email": "priya.shah@example.com",
       "phone": "555-0148",
-      "jobId": 6,
+      "jobId": "6",
       "status": "offer",
       "notes": "Strong system design round and excellent Angular architecture depth. Offer package is being finalized."
     },
@@ -130,7 +124,7 @@
       "name": "Ethan Cole",
       "email": "ethan.cole@example.com",
       "phone": "555-0119",
-      "jobId": 3,
+      "jobId": "3",
       "status": "applied",
       "notes": "New applicant with agency coordination experience and a strong scheduling background."
     },
@@ -139,7 +133,7 @@
       "name": "Sofia Martinez",
       "email": "sofia.martinez@example.com",
       "phone": "555-0172",
-      "jobId": 6,
+      "jobId": "6",
       "status": "placed",
       "notes": "Accepted the role and is scheduled to start next Monday pending final onboarding tasks."
     },
@@ -148,7 +142,7 @@
       "name": "Noah Bennett",
       "email": "noah.bennett@example.com",
       "phone": "555-0181",
-      "jobId": 4,
+      "jobId": "4",
       "status": "screening",
       "notes": "Quant-heavy operations background. Needs clarification on client reporting tool experience."
     },
@@ -157,7 +151,7 @@
       "name": "Avery Kim",
       "email": "avery.kim@example.com",
       "phone": "555-0194",
-      "jobId": 5,
+      "jobId": "5",
       "status": "rejected",
       "notes": "Solid relationship management skills, but stakeholder interview surfaced a mismatch on staffing-industry familiarity."
     },
@@ -166,7 +160,7 @@
       "name": "Liam Foster",
       "email": "liam.foster@example.com",
       "phone": "555-0166",
-      "jobId": 3,
+      "jobId": "3",
       "status": "interview",
       "notes": "Great recruiter-screen feedback. Panel interview booked for Thursday afternoon."
     }
